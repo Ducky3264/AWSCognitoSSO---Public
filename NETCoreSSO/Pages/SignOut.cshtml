@@ -1,0 +1,16 @@
+﻿@page "/Signout"
+@using Microsoft.AspNetCore.Authentication
+@model NETCoreSSO.Pages.SignOutModel
+@{
+    ViewData["Title"] = "SignOut";
+    //
+    HTTPTool HT = new HTTPTool();
+    //Console.WriteLine(await HT.HTTPGET("https://blazorauth.auth.us-east-2.amazoncognito.com/logout?client_id=3ajspobpqocqeisr4gav7vt39i&logout_uri=https://localhost:5001/signout-oidc"));
+    //await HttpContext.SignOutAsync();
+    var a = HttpContext.Request.Host;
+    var b = HttpContext.Request.Scheme;
+    HttpContext.Response.Redirect($"https://blazorauth.auth.us-east-2.amazoncognito.com/logout?client_id=3ajspobpqocqeisr4gav7vt39i&logout_uri={b}://{a}/signout-oidc");
+}
+
+
+<h1>Redirecting you...</h1>

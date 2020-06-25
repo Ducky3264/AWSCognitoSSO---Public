@@ -1,0 +1,46 @@
+﻿@page "/Profile"
+@model SigninChallengeModel
+
+@{
+    DepositBox DBox = new DepositBox();
+    WithdrawBox WBox = new WithdrawBox();
+    ViewData["Title"] = "Sign in";
+    //Todo: Add C# function to get Balance from MySQL Database
+   
+    DatabaseFunctions DBF = new DatabaseFunctions();
+    DBF.CheckForPreviousEntry(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value.ToString());
+    int CurrentBal = DBF.GetCurrentBal(User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value.ToString());
+    
+}
+@functions {
+    
+}
+
+
+    <body class="bg-light" style="">
+        <div class="text-center">
+            <p class="display-3">Hello @User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname").Value.ToString()!</p>
+            <div class="display-4">
+                <p>Your current Balance is $@CurrentBal</p>
+            </div>
+            <div class="container w-25 rounded justify-content-center h-100 px-1" style="background-color:white; border:solid 1px #686868; padding-top:20px; padding-bottom:160px; display: inline-block; *display: inline; zoom: 1; vertical-align: top;">
+                <p style="padding-top:15px">Would you like to make a deposit?</p>
+                <form class="" asp-action="Deposit" asp-controller="Form" method="POST" name="Depos" id="DF">
+                    <input asp-for="@DBox.DepositValue" />
+                    <input type="hidden" name="UID" value="@User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value.ToString()" />
+                    <input type="hidden" name="CurrBal" value="@CurrentBal" />
+                </form>
+                <button class="btn btn-primary" type="submit" form="DF" value="Submit">Submit</button>
+            </div>
+            <div class="container w-25 rounded justify-content-center h-100 px-1" style="background-color: white; border: solid 1px #686868; padding-top: 20px; padding-bottom: 160px; display: inline-block; *display: inline; zoom: 1; vertical-align: top;">
+                <p style="padding-top:15px">Would you like to make a withdrawl?</p>
+                <form class="" asp-controller="Form" asp-action="Withdrawl" method="POST" id="WF">
+                    <input asp-for="@WBox.WithdrawlValue" />
+                    <input type="hidden" name="UID" value="@User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value.ToString()" />
+                    <input type="hidden" name="CurrBal" value="@CurrentBal" />
+                </form>
+                <button class="btn btn-primary" type="submit" form="WF" value="Submit">Submit</button>
+            </div>
+        </div>
+
+    </body>
